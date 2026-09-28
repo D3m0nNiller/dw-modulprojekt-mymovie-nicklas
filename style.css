@@ -6,7 +6,7 @@
 
 img {
     max-width: 100%;
-    max-height: auto;
+    height: auto;
     display: block;
 }
 
@@ -73,4 +73,11 @@ input:checked+.slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+#horizontal-movie-row {
+    max-width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
 }
