@@ -38,10 +38,10 @@ fetch("https://api.themoviedb.org/3/trending/movie/week", {
             <section id="trending">
                 <div id="horizontal-movie-row">
                     ${data.results.map(movie =>/*HTML*/ `
-                    <a href="details.html?id=${movie.id}">
+                    <a href="details.html?id=${movie.id}" class="movies">
                         <div>
                             <img src="${baseUrl}${movie.poster_path}">
-                            <h2>${movie.title}</h2>
+                            <h3>${movie.title}</h3>
                         </div>
                     </a>
                 `).join("")}

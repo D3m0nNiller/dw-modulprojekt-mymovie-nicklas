@@ -80,4 +80,11 @@ input:checked+.slider:before {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: scroll;
+    gap: 20px;
+    scrollbar-width: none;
+}
+
+.movies {
+    flex-shrink: 0;
+  max-width: 143px;
 }
