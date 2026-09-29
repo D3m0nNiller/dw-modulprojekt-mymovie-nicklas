@@ -7,6 +7,7 @@ const rootDom = document.querySelector("#root")
 console.log(baseUrl);
 
 import { Header } from "./komponenter/Header.js";
+import { FooterMobile } from "./komponenter/FooterMobile.js";
 
 async function hentFilmData() {
   const options = {
@@ -92,5 +93,5 @@ hentFilmData();
                 `).join("")}
             </section>
         `
-        rootDom.append(Header(),mainDom)
+        rootDom.append(Header(), mainDom, FooterMobile())
     }
