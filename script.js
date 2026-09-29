@@ -43,16 +43,14 @@ hentFilmData();
 
     function render(trendingData, popularData, resGenres) {
         function hentGenreTags(genreIds) {
-        // 1. Vi mapper alle ID'erne
         return genreIds.map(id => {
                 const genre = resGenres.find(g => g.id === id);
                 
-                // 2. Hvis genren findes, returnerer vi et færdigt HTML-tag som tekst
                 if (genre) {
                     return `<span class="genre-badge">${genre.name}</span>`;
                 }
                 return "";
-            }).join(""); // Vi joiner med ingenting, så de bare står lige efter hinanden
+            }).join("");
         }
 
 
@@ -78,13 +76,14 @@ hentFilmData();
                 </div>
             </section>
 
-            <section id="trendy">
+            <section id="popular">
+            <h1>Popular</h1>
                 ${popularData.results.map(popular => /*html*/ `
                     <a href="details.html?id=${popular.id}">
-                        <div>
+                        <div class="setup-container">
                             <img src="${baseUrl + popular.poster_path}" alt="${popular.original_title}">
-                            <h3>${popular.title}</h3>
-
+                            <h2 class="movie-title">${popular.title}</h2>
+                            <p id="rating">${popular.vote_average.toFixed(1)}/10 IMDb</p>
                             <div class="genre-container">
                                 ${hentGenreTags(popular.genre_ids)}
                             </div>
