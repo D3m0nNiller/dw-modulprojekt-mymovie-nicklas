@@ -48,7 +48,7 @@ hentFilmData();
                 const genre = resGenres.find(g => g.id === id);
                 
                 if (genre) {
-                    return `<span class="genre-badge">${genre.name}</span>`;
+                    return `<p class="genre-badge">${genre.name}</p>`;
                 }
                 return "";
             }).join("");
