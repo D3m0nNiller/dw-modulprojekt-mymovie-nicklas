@@ -20,15 +20,23 @@ async function getDetails() {
   };
 
   try {
-    const [chosenDetails] = await Promise.all([
-    fetch(`https://api.themoviedb.org/3/movie/${id}`, options)
+    const [chosenDetails, resGenres, resActors] = await Promise.all([
+      fetch(`https://api.themoviedb.org/3/movie/${id}`, options),
+      fetch("https://api.themoviedb.org/3/genre/movie/list", options),
+      fetch(`https://api.themoviedb.org/3/movie/${id}/credits`, options)
     ]);
 
     const detailsResponse = await chosenDetails.json()
+    const genreData = await resGenres.json()
+    const actorsData = await resActors.json()
 
-    console.log("Chosen Details:", detailsResponse);    
+    console.log("Chosen Details:", detailsResponse);
+    console.log("Genre Details :", genreData.genres);
+    console.log("Actors Details", actorsData.cast);
 
-    detailsRender(detailsResponse);
+
+
+    detailsRender(detailsResponse, genreData.genres, actorsData.cast);
 
   } catch (error) {
     console.error(" Der skete en fejl under hentning af film:", error);
@@ -37,14 +45,65 @@ async function getDetails() {
 
 getDetails();
 
-function detailsRender(details) {
-    
-    rootDomDetails.innerHTML = ""
 
-    rootDomDetails.innerHTML = /*html*/ `
-        <div>
-            <img src="${baseUrl + details.poster_path}" alt="">
+
+function detailsRender(details, genres, cast) {
+  const actorsHTML = cast.map(actor => {
+    return /*html*/ `
+      <div>
+          <img src="${baseUrl + actor.profile_path}" alt="${actor.original_name}" loading="lazy">
+          <h2>${actor.original_name}</h2>
+        </div>`
+  }).join("")
+  
+
+  const genreHTML = details.genres.map(genre => {
+    return `<p class="genre-badge">${genre.name}</p>`;
+  }).join("");
+
+  rootDomDetails.innerHTML = ""
+
+  rootDomDetails.innerHTML = /*html*/ `
+      <img src="${baseUrl + details.poster_path}" alt="">
+        
+      <h1 class="movie-title">${details.original_title}</h1>
+
+      <p class="details-rating">${details.vote_average.toFixed(1)}/10 IMDb</p>
+
+      <div>
+        ${genreHTML}
+      </div>
+
+      <div class="extra-information">
+        <div id="length">
+          <p>Length</p> <br>
+          <p>"time"</p>
         </div>
+
+        <div id="language">
+          <p>Language</p> <br>
+          <p>"English"</p>
+        </div>
+
+        <div id="rating-number">
+          <p>Rating</p> <br>
+          <p>"PG-Number"</p>
+        </div>
+      </div>
+
+      <section>
+        <h2>Description</h2>
+
+        <p>${details.overview}</p>
+      </section>
+
+      <section>
+        <h2>Cast</h2>
+
+        <div>
+            ${actorsHTML}
+        </div>
+      </section>
     `
 }
 detailsRender()
