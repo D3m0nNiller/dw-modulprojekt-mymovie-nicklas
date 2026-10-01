@@ -76,17 +76,17 @@ function detailsRender(details, genres, cast) {
 
       <div class="extra-information">
         <div id="length">
-          <p>Length</p> <br>
+          <p>Length</p>
           <p>"time"</p>
         </div>
 
         <div id="language">
-          <p>Language</p> <br>
+          <p>Language</p>
           <p>"English"</p>
         </div>
 
         <div id="rating-number">
-          <p>Rating</p> <br>
+          <p>Rating</p>
           <p>"PG-Number"</p>
         </div>
       </div>
