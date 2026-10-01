@@ -20,10 +20,10 @@ async function getDetails() {
   };
 
   try {
-    const [chosenDetails, resGenres, resActors] = await Promise.all([
-      fetch(`https://api.themoviedb.org/3/movie/${id}`, options),
+    const [chosenDetails, resGenres, resActors, resVideo] = await Promise.all([
+      fetch(`https://api.themoviedb.org/3/movie/${id}?append_to_response=videos`, options),
       fetch("https://api.themoviedb.org/3/genre/movie/list", options),
-      fetch(`https://api.themoviedb.org/3/movie/${id}/credits`, options)
+      fetch(`https://api.themoviedb.org/3/movie/${id}/credits`, options),
     ]);
 
     const detailsResponse = await chosenDetails.json()
@@ -33,6 +33,7 @@ async function getDetails() {
     console.log("Chosen Details:", detailsResponse);
     console.log("Genre Details :", genreData.genres);
     console.log("Actors Details", actorsData.cast);
+    
 
 
 
@@ -45,9 +46,29 @@ async function getDetails() {
 
 getDetails();
 
-
-
 function detailsRender(details, genres, cast) {
+
+let youtubeKey = "";
+  
+  if (details.videos && details.videos.results) {
+    const trailerVideo = details.videos.results.find(
+      video => video.site === "YouTube" && video.type === "Trailer"
+    );
+    
+    if (trailerVideo) {
+      youtubeKey = trailerVideo.key;
+
+    } else if (details.videos.results.length > 0) {
+      youtubeKey = details.videos.results[0].key;
+    }
+  }
+
+  console.log(youtubeKey);
+  
+  const iframeHTML = youtubeKey 
+    ? `<iframe src="https://www.youtube.com/embed/${youtubeKey}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+    : `<p class="no-trailer">No trailer available for this movie.</p>`;
+
   const actorsHTML = cast.map(actor => {
     return /*html*/ `
       <div>
@@ -56,6 +77,11 @@ function detailsRender(details, genres, cast) {
         </div>`
   }).join("")
   
+  const languagesSpoken = details.spoken_languages.map(language => {
+    return /*html*/ `
+      <p>${language.english_name}</p>
+    `
+  })
 
   const genreHTML = details.genres.map(genre => {
     return `<p class="genre-badge">${genre.name}</p>`;
@@ -64,7 +90,7 @@ function detailsRender(details, genres, cast) {
   rootDomDetails.innerHTML = ""
 
   rootDomDetails.innerHTML = /*html*/ `
-      <img src="${baseUrl + details.poster_path}" alt="">
+      <div>${iframeHTML}</div>
         
       <h1 class="movie-title">${details.original_title}</h1>
 
@@ -80,9 +106,9 @@ function detailsRender(details, genres, cast) {
           <p>"time"</p>
         </div>
 
-        <div id="language">
+        <div>
           <p>Language</p>
-          <p>"English"</p>
+          <div id="language">${languagesSpoken}</div>
         </div>
 
         <div id="rating-number">
