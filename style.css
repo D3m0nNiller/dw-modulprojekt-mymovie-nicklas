@@ -169,6 +169,13 @@ footer {
     }
 }
 
+@media screen and (min-width: 1080px) {
+    #horizontal-movie-row,
+    #actors-list {
+        scrollbar-width: auto;
+    }
+}
+
 
 /*Details.hrml--------------------------------------*/
 .iframe-container {
