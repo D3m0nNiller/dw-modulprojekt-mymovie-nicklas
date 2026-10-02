@@ -11,6 +11,8 @@ const id = params.get("id");
 
 console.log(id);
 
+import { DetailsHeader } from "./komponenter/detailsHeader.js";
+
 async function getDetails() {
   const options = {
     headers: {
@@ -98,8 +100,8 @@ function detailsRender(details, genres, cast) {
   }).join("");
 
   rootDomDetails.innerHTML = ""
-
-  rootDomDetails.innerHTML = /*html*/ `
+  const mainDom = document.createElement("main")
+  mainDom.innerHTML = /*html*/ `
       <main>
         ${iframeHTML}
           
@@ -146,5 +148,6 @@ function detailsRender(details, genres, cast) {
         </section>
       </main>
     `
+    rootDomDetails.append(DetailsHeader(), mainDom)
 }
 detailsRender()

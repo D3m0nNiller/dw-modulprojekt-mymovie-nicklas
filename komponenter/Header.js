@@ -1,6 +1,6 @@
 export function Header() {
     const headerElement = document.createElement("header")
-
+    headerElement.classList.add("index-header")
     headerElement.innerHTML = /*html*/`
         <i class="fa-solid fa-bars-staggered"></i>
         <h1>MyMovies</h1>
