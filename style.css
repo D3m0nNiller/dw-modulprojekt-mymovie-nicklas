@@ -185,3 +185,66 @@ footer {
 .no-poster img {
     margin: auto;
 }
+
+#the-movie {
+    display: grid;
+  grid-auto-flow: column;
+}
+
+.movie-title {
+    margin: 1em auto 0 20px;
+}
+
+.fa-bookmark {
+    margin-left: auto;
+  margin-right: 20px;
+  place-self: center;
+}
+
+.genre-container {
+    display: flex;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.details-rating {
+    margin: 2em 0 2em 20px;
+}
+
+.extra-information {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 15px;
+}
+
+#length p:first-of-type,
+#language-header,
+#rating-number p:first-of-type {
+    color: #9C9C9C;
+}
+
+#actors-list {
+    max-width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  gap: 20px;
+  scrollbar-width: none;
+}
+
+#actors-list .actors {
+    flex-shrink: 0;
+  max-width: 143px;
+}
+
+#description-movie h2 {
+ margin-bottom: 10px;
+} 
+
+#description-movie {
+    margin: 1em 0 1em 20px;
+}
+
+#casting {
+    margin-left: 20px;
+}

@@ -33,9 +33,6 @@ async function getDetails() {
     console.log("Chosen Details:", detailsResponse);
     console.log("Genre Details :", genreData.genres);
     console.log("Actors Details", actorsData.cast);
-    
-
-
 
     detailsRender(detailsResponse, genreData.genres, actorsData.cast);
 
@@ -43,28 +40,27 @@ async function getDetails() {
     console.error(" Der skete en fejl under hentning af film:", error);
   }
 }
-{/* <img src="${baseUrl + actor.profile_path}" alt="${actor.name}" loading="lazy">
-          <h2>${actor.name}</h2> */}
+
 getDetails();
 
 function detailsRender(details, genres, cast) {
 
-let totalMinutes = details.runtime; 
+  let totalMinutes = details.runtime;
 
-let hours = Math.floor(totalMinutes / 60);
-let minutes = totalMinutes % 60;
+  let hours = Math.floor(totalMinutes / 60);
+  let minutes = totalMinutes % 60;
 
-let formattedLength = `${hours}h ${minutes}m`;
+  let formattedLength = `${hours}h ${minutes}m`;
 
-console.log(formattedLength);
+  console.log(formattedLength);
 
-let youtubeKey = "";
-  
+  let youtubeKey = "";
+
   if (details.videos && details.videos.results) {
     const trailerVideo = details.videos.results.find(
       video => video.site === "YouTube" && video.type === "Trailer"
     );
-    
+
     if (trailerVideo) {
       youtubeKey = trailerVideo.key;
 
@@ -74,24 +70,23 @@ let youtubeKey = "";
   }
 
   console.log(youtubeKey);
-  
-  const iframeHTML = youtubeKey 
+
+  const iframeHTML = youtubeKey
     ?/*html*/ `<div class="iframe-container"><iframe src="https://www.youtube.com/embed/${youtubeKey}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`
     :/*html*/ `<div class="no-poster"><img src="${baseUrl}${details.poster_path}" alt="${details.name}"></div>`;
-    
 
   const actorsHTML = cast.map(actor => {
-  return /*html*/`
+    return /*html*/`
     <div>
-      ${actor.profile_path 
-        ? `<img src="${baseUrl + actor.profile_path}" alt="${actor.name}" loading="lazy">`
-        : `<img src="https://placehold.co/500x750/png" alt="No image available" class="shrinkToFit transparent">`
+      ${actor.profile_path
+        ?/*html*/ `<img src="${baseUrl + actor.profile_path}" alt="${actor.name}" loading="lazy" class="actors">`
+        :/*html*/ `<img src="https://placehold.co/500x750/png" alt="No image available" class="shrinkToFit transparent actors">`
       }
       <h2>${actor.name}</h2>
     </div>
   `
-}).join("")
-  
+  }).join("")
+
   const languagesSpoken = details.spoken_languages.map(language => {
     return /*html*/ `
       <p>${language.english_name}</p>
@@ -105,46 +100,51 @@ let youtubeKey = "";
   rootDomDetails.innerHTML = ""
 
   rootDomDetails.innerHTML = /*html*/ `
-      ${iframeHTML}
+      <main>
+        ${iframeHTML}
+          
+        <div id="the-movie">
+          <h1 class="movie-title">${details.title}</h1>
+          <i class="fa-regular fa-bookmark"></i>
+        </div>
         
-      <h1 class="movie-title">${details.title}</h1>
+        <p class="details-rating">${details.vote_average.toFixed(1)}/10 IMDb</p>
 
-      <p class="details-rating">${details.vote_average.toFixed(1)}/10 IMDb</p>
-
-      <div>
-        ${genreHTML}
-      </div>
-
-      <div class="extra-information">
-        <div id="length">
-          <p>Length</p>
-          <p>${formattedLength}</p>
+        <div class="genre-container">
+          ${genreHTML}
         </div>
 
-        <div>
-          <p>Language</p>
-          <div id="language">${languagesSpoken}</div>
+        <div class="extra-information">
+          <div id="length">
+            <p>Length</p>
+            <p>${formattedLength}</p>
+          </div>
+
+          <div id="languages">
+            <p id="language-header">Language</p>
+            <div id="movie-languages">${languagesSpoken}</div>
+          </div>
+
+          <div id="rating-number">
+            <p>Rating</p>
+            <p>PG-13</p>
+          </div>
         </div>
 
-        <div id="rating-number">
-          <p>Rating</p>
-          <p>PG-13</p>
-        </div>
-      </div>
+        <section id="description-movie">
+          <h2>Description</h2>
 
-      <section>
-        <h2>Description</h2>
+          <p>${details.overview}</p>
+        </section>
 
-        <p>${details.overview}</p>
-      </section>
+        <section id="casting">
+          <h2>Cast</h2>
 
-      <section>
-        <h2>Cast</h2>
-
-        <div>
-            ${actorsHTML}
-        </div>
-      </section>
+          <div id="actors-list">
+              ${actorsHTML}
+          </div>
+        </section>
+      </main>
     `
 }
 detailsRender()
