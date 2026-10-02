@@ -95,6 +95,9 @@ function detailsRender(details, genres, cast) {
     `
   })
 
+  const titleDom = document.querySelector("title")
+  titleDom.textContent = /*html*/` ${details.title} `
+
   const genreHTML = details.genres.map(genre => {
     return `<p class="genre-badge">${genre.name}</p>`;
   }).join("");
