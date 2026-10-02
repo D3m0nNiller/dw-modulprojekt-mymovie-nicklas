@@ -263,7 +263,7 @@ footer {
 }
 
 .details-header {
-    position: fixed;
+    position: absolute;
   z-index: 3;
   left: 0;
   right: 0;
