@@ -48,6 +48,15 @@ getDetails();
 
 function detailsRender(details, genres, cast) {
 
+let totalMinutes = details.runtime; 
+
+let hours = Math.floor(totalMinutes / 60);
+let minutes = totalMinutes % 60;
+
+let formattedLength = `${hours}h ${minutes}m`;
+
+console.log(formattedLength);
+
 let youtubeKey = "";
   
   if (details.videos && details.videos.results) {
@@ -66,14 +75,15 @@ let youtubeKey = "";
   console.log(youtubeKey);
   
   const iframeHTML = youtubeKey 
-    ? `<iframe src="https://www.youtube.com/embed/${youtubeKey}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
-    : `<p class="no-trailer">No trailer available for this movie.</p>`;
+    ?/*html*/ `<div class="iframe-container"><iframe src="https://www.youtube.com/embed/${youtubeKey}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`
+    :/*html*/ `<div class="no-poster"><img src="${baseUrl}${details.poster_path}" alt="${details.name}"></div>`;
+    
 
   const actorsHTML = cast.map(actor => {
     return /*html*/ `
       <div>
-          <img src="${baseUrl + actor.profile_path}" alt="${actor.original_name}" loading="lazy">
-          <h2>${actor.original_name}</h2>
+          <img src="${baseUrl + actor.profile_path}" alt="${actor.name}" loading="lazy">
+          <h2>${actor.name}</h2>
         </div>`
   }).join("")
   
@@ -90,9 +100,9 @@ let youtubeKey = "";
   rootDomDetails.innerHTML = ""
 
   rootDomDetails.innerHTML = /*html*/ `
-      <div>${iframeHTML}</div>
+      ${iframeHTML}
         
-      <h1 class="movie-title">${details.original_title}</h1>
+      <h1 class="movie-title">${details.title}</h1>
 
       <p class="details-rating">${details.vote_average.toFixed(1)}/10 IMDb</p>
 
@@ -103,7 +113,7 @@ let youtubeKey = "";
       <div class="extra-information">
         <div id="length">
           <p>Length</p>
-          <p>"time"</p>
+          <p>${formattedLength}</p>
         </div>
 
         <div>
