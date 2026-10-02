@@ -20,7 +20,7 @@ async function getDetails() {
   };
 
   try {
-    const [chosenDetails, resGenres, resActors, resVideo] = await Promise.all([
+    const [chosenDetails, resGenres, resActors] = await Promise.all([
       fetch(`https://api.themoviedb.org/3/movie/${id}?append_to_response=videos`, options),
       fetch("https://api.themoviedb.org/3/genre/movie/list", options),
       fetch(`https://api.themoviedb.org/3/movie/${id}/credits`, options),
@@ -43,7 +43,8 @@ async function getDetails() {
     console.error(" Der skete en fejl under hentning af film:", error);
   }
 }
-
+{/* <img src="${baseUrl + actor.profile_path}" alt="${actor.name}" loading="lazy">
+          <h2>${actor.name}</h2> */}
 getDetails();
 
 function detailsRender(details, genres, cast) {
@@ -80,12 +81,16 @@ let youtubeKey = "";
     
 
   const actorsHTML = cast.map(actor => {
-    return /*html*/ `
-      <div>
-          <img src="${baseUrl + actor.profile_path}" alt="${actor.name}" loading="lazy">
-          <h2>${actor.name}</h2>
-        </div>`
-  }).join("")
+  return /*html*/`
+    <div>
+      ${actor.profile_path 
+        ? `<img src="${baseUrl + actor.profile_path}" alt="${actor.name}" loading="lazy">`
+        : `<img src="https://placehold.co/500x750/png" alt="No image available" class="shrinkToFit transparent">`
+      }
+      <h2>${actor.name}</h2>
+    </div>
+  `
+}).join("")
   
   const languagesSpoken = details.spoken_languages.map(language => {
     return /*html*/ `
@@ -123,7 +128,7 @@ let youtubeKey = "";
 
         <div id="rating-number">
           <p>Rating</p>
-          <p>"PG-Number"</p>
+          <p>PG-13</p>
         </div>
       </div>
 
